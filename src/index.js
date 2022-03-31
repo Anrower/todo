@@ -1,24 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-const TodoList = () => {
-  return (
-    <ul>
-      <li>Learn React</li>
-      <li>Build Awesome App</li>
-    </ul>
-  );
-};
-
-const AppHeader = () => {
-  return <h1>My Todo List</h1>
-};
-
-const SearcPanel = () => {
-  return <input placeholder='search' />;
-};
+import ReactDOM from 'react-dom/client';
+import AppHeader from './components/app-header';
+import SearcPanel from './components/search-panel';
+import TodoList from './components/todo-list';
 
 const App = () => {
+
   return (
     <div>
       <AppHeader />
@@ -28,6 +15,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(
-  <App />, document.getElementById('root')
-);
+
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container);
+root.render(<App />);
