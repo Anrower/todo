@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './todo-list-item.css'
 
-const TodoListItem = ({ label }) => {
+const TodoListItem = ({ label, onDeleted }) => {
+
   const [labelArg, setLabelArg] = useState(
     {
       done: false,
@@ -44,7 +45,8 @@ const TodoListItem = ({ label }) => {
         </button>
 
         <button type="button"
-          className="btn btn-outline-danger btn-sm float-right">
+          className="btn btn-outline-danger btn-sm float-right"
+          onClick={onDeleted}>
           <i className="fas fa-trash-alt"></i>
         </button>
       </span>
