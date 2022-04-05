@@ -9,25 +9,38 @@ import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
 
+  const createTodoItem = (label) => {
+    return {
+      label,
+      important: false,
+      done: false,
+      id: uuidv4()
+    };
+  }
+
   const [todoData, setTodoData] = useState([
-    { label: 'Drink Coffee', important: false, id: 1 },
-    { label: 'Make Awesome App', important: true, id: 2 },
-    { label: 'Have a lunch', important: false, id: 3 },
+    createTodoItem('Drink Coffee'),
+    createTodoItem('Make Awesome App'),
+    createTodoItem('Have a Lunch')
   ]);
 
   const deleteItem = (id) => {
     setTodoData(todoData.filter(p => p.id !== id))
   }
 
-  const addItem = (text) => {
-    const newItem = {
-      label: text,
-      important: false,
-      id: uuidv4()
-    }
+  const onToggleDone = (id) => {
+    console.log('done toggled', id);
+  };
+
+  const onToggleImportant = (id) => {
+    console.log('important toggled', id)
+  };
+
+  const addItem = (label) => {
+    const newItem = createTodoItem(label)
     setTodoData([...todoData, newItem]);
     console.log('Added', newItem);
-  }
+  };
 
   return (
     <div className='todo-app'>
@@ -37,7 +50,9 @@ const App = () => {
         <ItemStatusFilter />
       </div>
       <TodoList todos={todoData}
-        onDeleted={deleteItem} />
+        onDeleted={deleteItem}
+        onToggleImportant={onToggleImportant}
+        onToggleDone={onToggleDone} />
       <ItemAddForm onItemAdded={addItem} />
     </div>
   );
