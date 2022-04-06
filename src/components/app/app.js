@@ -32,6 +32,12 @@ const App = () => {
     ];
   }
 
+  const [statusFilter, setStatusFilter] = useState({
+    all: false,
+    active: false,
+    done: false
+  })
+
   const [todoData, setTodoData] = useState([
     createTodoItem('Drink Coffee'),
     createTodoItem('Make Awesome App'),
@@ -39,7 +45,34 @@ const App = () => {
   ]);
 
   const deleteItem = (id) => {
-    setTodoData(todoData.filter(p => p.id !== id))
+    setTodoData(todoData.filter(el => el.id !== id));
+  }
+
+  const sortByStatus = (status) => {
+    status === 'done' ? (
+      setTodoData(todoData.filter(el => el.done))
+    ) : (
+      setTodoData(todoData.filter(el => !el.done))
+    );
+  }
+
+  const toggleStatus = (todoStatus) => {
+    const cleanStatus = {
+      all: false,
+      active: false,
+      done: false
+    }
+
+    const newStatus = {
+      ...cleanStatus,
+      [todoStatus]: true
+    };
+
+    setStatusFilter(newStatus);
+
+    if (todoStatus !== 'all') {
+      sortByStatus(todoStatus);
+    }
   }
 
   const onToggleDone = (id) => {
@@ -63,7 +96,9 @@ const App = () => {
       <AppHeader todo={todoCount} done={doneCount} />
       <div className='top-panel d-flex'>
         <SearcPanel />
-        <ItemStatusFilter />
+        <ItemStatusFilter onToggleStatus={toggleStatus}
+          statusFilter={statusFilter}
+        />
       </div>
       <TodoList todos={todoData}
         onDeleted={deleteItem}

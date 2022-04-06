@@ -6,7 +6,6 @@ const ItemAddForm = ({ onItemAdded }) => {
 
   const onLabelChange = (e) => {
     setLabel(e.target.value);
-    console.log(e.target.value);
   };
 
   const onSubmit = (e) => {
