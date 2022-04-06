@@ -18,6 +18,20 @@ const App = () => {
     };
   }
 
+  const toggleProperty = (arr, id, propName) => {
+    const idx = arr.findIndex((el) => el.id === id);
+    const oldItem = arr[idx];
+    const newItem = {
+      ...oldItem,
+      [propName]: !oldItem[propName]
+    };
+    return [
+      ...arr.slice(0, idx),
+      newItem,
+      ...arr.slice(idx + 1)
+    ];
+  }
+
   const [todoData, setTodoData] = useState([
     createTodoItem('Drink Coffee'),
     createTodoItem('Make Awesome App'),
@@ -29,11 +43,11 @@ const App = () => {
   }
 
   const onToggleDone = (id) => {
-    console.log('done toggled', id);
+    setTodoData(toggleProperty(todoData, id, 'done'));
   };
 
   const onToggleImportant = (id) => {
-    console.log('important toggled', id)
+    setTodoData(toggleProperty(todoData, id, 'important'));
   };
 
   const addItem = (label) => {
@@ -42,9 +56,12 @@ const App = () => {
     console.log('Added', newItem);
   };
 
+  const doneCount = todoData.filter(p => p.done).length;
+  const todoCount = todoData.length - doneCount;
+
   return (
     <div className='todo-app'>
-      <AppHeader todo={1} done={3} />
+      <AppHeader todo={todoCount} done={doneCount} />
       <div className='top-panel d-flex'>
         <SearcPanel />
         <ItemStatusFilter />
