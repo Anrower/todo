@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './item-add-form.css'
 
 const ItemAddForm = ({ onItemAdded }) => {
+  const [label, setLabel] = useState('');
+
+  const onLabelChange = (e) => {
+    setLabel(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    onItemAdded(label);
+    setLabel('');
+  }
+
   return (
-    <div className='item-add-form'>
-      <button className='btn btn-outline-primary'
-        onClick={() => onItemAdded('Hello World!')}
-      >
+    <form className='item-add-form d-flex'
+      onSubmit={onSubmit}>
+      <input type='text'
+        className='form-control'
+        onChange={onLabelChange}
+        placeholder='What needs to be done'
+        value={label}
+      />
+      <button className='btn btn-outline-primary'>
         Add Element
       </button>
-    </div>
+    </form>
   );
 };
 

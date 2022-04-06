@@ -53,7 +53,6 @@ const App = () => {
   const addItem = (label) => {
     const newItem = createTodoItem(label)
     setTodoData([...todoData, newItem]);
-    console.log('Added', newItem);
   };
 
   const doneCount = todoData.filter(p => p.done).length;
