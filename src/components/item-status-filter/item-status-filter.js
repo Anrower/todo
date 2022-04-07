@@ -2,16 +2,15 @@ import React from 'react';
 import './item-status-filter.css';
 
 const ItemStatusFilter = ({ onToggleStatus, statusFilter }) => {
-  const { active, done } = statusFilter;
 
   let activeAll = 'btn btn-secondary',
     activeActive = 'btn btn-secondary',
     activeDone = 'btn btn-secondary';
 
-  switch (true) {
-    case done: activeDone += ' btn-info';
+  switch (statusFilter) {
+    case 'done': activeDone += ' btn-info';
       break;
-    case active: activeActive += ' btn-info';
+    case 'active': activeActive += ' btn-info';
       break;
     default: activeAll += ' btn-info';
   }

@@ -14,11 +14,47 @@ const App = () => {
       label,
       important: false,
       done: false,
-      id: uuidv4()
+      id: uuidv4(),
+      filter: ''
     };
   }
 
-  const toggleProperty = (arr, id, propName) => {
+  const [currentStatusFilter, setCurrentStatusFilter] = useState('');
+  const [term, setTerm] = useState('Dr');
+  const [todoData, setTodoData] = useState([
+    createTodoItem('Drink Coffee'),
+    createTodoItem('Make Awesome App'),
+    createTodoItem('Have a Lunch')
+  ]);
+
+  const search = (items, term) => {
+    if (term.length === 0) {
+      return items;
+    }
+    return items.filter((item) => {
+      return item.label.indexOf(term) > -1;
+    });
+  }
+
+  const setFilter = (items, currentStatusFilter) => {
+    if (currentStatusFilter.length === 0 || currentStatusFilter === 'all') {
+      return items;
+    } else if (currentStatusFilter === 'done') {
+      return items.filter((item) => item.done);
+    } else {
+      return items.filter((item) => !item.done);
+    }
+  }
+
+  const visibleItems = (todoData, currentStatusFilter, term) => {
+    if (term !== '') {
+      return search(todoData, term);
+    }
+    return setFilter(todoData, currentStatusFilter);
+  }
+
+
+  const toggleProperty = (arr, id, propName,) => {
     const idx = arr.findIndex((el) => el.id === id);
     const oldItem = arr[idx];
     const newItem = {
@@ -32,47 +68,12 @@ const App = () => {
     ];
   }
 
-  const [statusFilter, setStatusFilter] = useState({
-    all: false,
-    active: false,
-    done: false
-  })
-
-  const [todoData, setTodoData] = useState([
-    createTodoItem('Drink Coffee'),
-    createTodoItem('Make Awesome App'),
-    createTodoItem('Have a Lunch')
-  ]);
-
   const deleteItem = (id) => {
     setTodoData(todoData.filter(el => el.id !== id));
   }
 
-  const sortByStatus = (status) => {
-    status === 'done' ? (
-      setTodoData(todoData.filter(el => el.done))
-    ) : (
-      setTodoData(todoData.filter(el => !el.done))
-    );
-  }
-
-  const toggleStatus = (todoStatus) => {
-    const cleanStatus = {
-      all: false,
-      active: false,
-      done: false
-    }
-
-    const newStatus = {
-      ...cleanStatus,
-      [todoStatus]: true
-    };
-
-    setStatusFilter(newStatus);
-
-    if (todoStatus !== 'all') {
-      sortByStatus(todoStatus);
-    }
+  const toggleFilter = (statusFilter) => {
+    setCurrentStatusFilter(statusFilter);
   }
 
   const onToggleDone = (id) => {
@@ -96,11 +97,11 @@ const App = () => {
       <AppHeader todo={todoCount} done={doneCount} />
       <div className='top-panel d-flex'>
         <SearcPanel />
-        <ItemStatusFilter onToggleStatus={toggleStatus}
-          statusFilter={statusFilter}
+        <ItemStatusFilter onToggleStatus={toggleFilter}
+          statusFilter={currentStatusFilter}
         />
       </div>
-      <TodoList todos={todoData}
+      <TodoList todos={visibleItems(todoData, currentStatusFilter, term)}
         onDeleted={deleteItem}
         onToggleImportant={onToggleImportant}
         onToggleDone={onToggleDone} />
