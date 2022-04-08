@@ -9,6 +9,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
 
+  //TODO local storage
+  const localStorage = [todoData, term, currentStatusFilter];
+
   const createTodoItem = (label) => {
     return {
       label,
