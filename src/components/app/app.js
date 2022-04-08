@@ -20,7 +20,7 @@ const App = () => {
   }
 
   const [currentStatusFilter, setCurrentStatusFilter] = useState('');
-  const [term, setTerm] = useState('Dr');
+  const [term, setTerm] = useState('');
   const [todoData, setTodoData] = useState([
     createTodoItem('Drink Coffee'),
     createTodoItem('Make Awesome App'),
@@ -31,26 +31,31 @@ const App = () => {
     if (term.length === 0) {
       return items;
     }
-    return items.filter((item) => {
+    const result = items.filter((item) => {
       return item.label.indexOf(term) > -1;
     });
+    return result;
   }
 
-  const setFilter = (items, currentStatusFilter) => {
+  const onSearch = (value) => {
+    setTerm(value);
+  }
+
+  const setFilter = (items, currentStatusFilter, term) => {
+    let result = items;
     if (currentStatusFilter.length === 0 || currentStatusFilter === 'all') {
-      return items;
+      return search(result, term);
     } else if (currentStatusFilter === 'done') {
-      return items.filter((item) => item.done);
+      result = items.filter((item) => item.done);
+      return search(result, term);
     } else {
-      return items.filter((item) => !item.done);
+      result = items.filter((item) => !item.done);
+      return search(result, term);
     }
   }
 
   const visibleItems = (todoData, currentStatusFilter, term) => {
-    if (term !== '') {
-      return search(todoData, term);
-    }
-    return setFilter(todoData, currentStatusFilter);
+    return setFilter(todoData, currentStatusFilter, term);
   }
 
 
@@ -96,7 +101,9 @@ const App = () => {
     <div className='todo-app'>
       <AppHeader todo={todoCount} done={doneCount} />
       <div className='top-panel d-flex'>
-        <SearcPanel />
+        <SearcPanel onSearch={onSearch}
+          state={term}
+        />
         <ItemStatusFilter onToggleStatus={toggleFilter}
           statusFilter={currentStatusFilter}
         />
